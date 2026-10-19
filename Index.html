@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KIRA LUX — Portal</title>
+  <style>
+    :root { --btn-fill:#330000; --btn-stroke:#ff2a2a; --btn-text:#ffecec; }
+    body{margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh}
+    .canvas { max-width:100%; width:1200px; }
+    #svg-container { width:100%; display:block; }
+    #svg-container #portal-button { cursor: pointer; transition: transform .14s ease, filter .14s ease; outline: none; }
+    #svg-container #portal-button .button-bg { transition: fill .14s ease, stroke .14s ease; }
+    #svg-container #portal-button .btn-text { transition: fill .14s ease, filter .14s ease; }
+    #svg-container #portal-button:hover .button-bg,
+    #svg-container #portal-button:focus .button-bg {
+      fill: #ff1515;
+      stroke: #fff0f0;
+    }
+    #svg-container #portal-button:hover .btn-text,
+    #svg-container #portal-button:focus .btn-text {
+      fill: #fff7f7;
+      filter: drop-shadow(0 6px 12px rgba(255,20,20,0.35));
+    }
+    #svg-container #portal-button:active { transform: translateY(2px); }
+    @media (hover: none) {
+      #svg-container #portal-button:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="canvas" aria-hidden="false">
+    <div id="svg-container" role="img" aria-label="Kira Lux portal — carregando...">
+      <img src="assets/images/kira-portal-wide-red.svg" alt="Kira Lux portal" style="width:100%;height:auto;display:block" />
+    </div>
+  </div>
+
+<script>
+  fetch('assets/images/kira-portal-wide-red.svg')
+    .then(resp => {
+      if (!resp.ok) throw new Error('SVG não encontrado');
+      return resp.text();
+    })
+    .then(svgText => {
+      const container = document.getElementById('svg-container');
+      container.innerHTML = svgText;
+      container.setAttribute('role','img');
+      container.setAttribute('aria-label','Kira Lux portal');
+      initPortal();
+    })
+    .catch(err => {
+      console.warn('Não foi possível injetar SVG:', err);
+    });
+
+  function initPortal() {
+    const portal = document.querySelector('#svg-container #portal-button');
+    if (!portal) return;
+    portal.setAttribute('role','button');
+    portal.setAttribute('tabindex','0');
+    portal.setAttribute('aria-label','ENTRE');
+    portal.addEventListener('click', () => {
+      alert('Você clicou em ENTRE — substitua por sua ação.');
+      // window.location.href = '/outra-pagina.html';
+    });
+    portal.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        portal.click();
+      }
+    });
+  }
+</script>
+</body>
+</html>
